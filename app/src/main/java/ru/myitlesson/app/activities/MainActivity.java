@@ -3,7 +3,7 @@ package ru.myitlesson.app.activities;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -20,26 +20,30 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main_activity);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
-        bottomNavigationView.setOnItemSelectedListener(item -> setFragment(item.getItemId()));
+        bottomNavigationView.setOnItemSelectedListener(item -> setFragmentByNavigationItem(item.getItemId()));
     }
 
-    private boolean setFragment(int itemId) {
-        FragmentTransaction transaction = getSupportFragmentManager()
+    public void setFragmentInContainer(int containerId, Class<? extends Fragment> fragmentClass) {
+        getSupportFragmentManager()
                 .beginTransaction()
-                .setReorderingAllowed(true);
+                .replace(containerId, fragmentClass, null)
+                .setReorderingAllowed(true)
+                .commit();
+    }
 
+    private boolean setFragmentByNavigationItem(int itemId) {
         if(itemId == R.id.courses_item) {
-            transaction.replace(R.id.fragment_container_view, CoursesFragment.class, null).commit();
+            setFragmentInContainer(R.id.fragment_container_view, CoursesFragment.class);
             return true;
         }
 
         if(itemId == R.id.users_item) {
-            transaction.replace(R.id.fragment_container_view, UsersFragment.class, null).commit();
+            setFragmentInContainer(R.id.fragment_container_view, UsersFragment.class);
             return true;
         }
 
         if(itemId == R.id.profile_item) {
-            transaction.replace(R.id.fragment_container_view, ProfileFragment.class, null).commit();
+            setFragmentInContainer(R.id.fragment_container_view, ProfileFragment.class);
             return true;
         }
 
