@@ -13,6 +13,7 @@
     <string name="find_course_search_hint">Find Course</string>
     <string name="recommend_courses">Recommend</string>
     <string name="course_card_image">Course Card Image</string>
+    <string name="user_card_image">User Card Image</string>
     <string name="title">Title</string>
     <string name="body">Body</string>
     <string name="add_course">ADD COURSE</string>
