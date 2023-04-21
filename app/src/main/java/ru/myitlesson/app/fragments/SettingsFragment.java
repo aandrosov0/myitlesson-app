@@ -22,6 +22,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         // TODO: Bind preferences
     }
 
+    @NonNull
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.preferences_fragment, container, false);
