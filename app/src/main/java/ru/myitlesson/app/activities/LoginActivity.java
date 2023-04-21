@@ -62,7 +62,7 @@ public class LoginActivity extends Activity {
 
         String token = generateToken(username, password);
 
-//        TODO:
+//        TODO: get token from API and send it to the MainActivity.java class
 //        if(token == null) {
 //            usernameInputLayout.setError(" ");
 //            passwordInputLayout.setError(getString(R.string.incorrect_data));
@@ -73,7 +73,8 @@ public class LoginActivity extends Activity {
     }
 
     private String generateToken(CharSequence username, CharSequence password) {
-        return username.toString() + password;
+        //TODO: Get token from API
+        return "";
     }
 
     private void sendToken(String token) {

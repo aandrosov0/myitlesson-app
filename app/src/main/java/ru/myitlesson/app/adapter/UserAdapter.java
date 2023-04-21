@@ -1,6 +1,5 @@
 package ru.myitlesson.app.adapter;
 
-import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

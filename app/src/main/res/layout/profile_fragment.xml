@@ -14,18 +14,20 @@
         android:gravity="end">
 
         <com.google.android.material.button.MaterialButton
-            style="@style/Widget.Material3.Button.IconButton.Outlined"
-            app:icon="@drawable/notifications"
+            android:id="@+id/notifications_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/notification_button"/>
+            android:contentDescription="@string/notification_button"
+            style="@style/Widget.Material3.Button.IconButton.Outlined"
+            app:icon="@drawable/notifications"/>
 
         <com.google.android.material.button.MaterialButton
-            style="@style/Widget.Material3.Button.IconButton.Outlined"
-            app:icon="@drawable/settings"
+            android:id="@+id/settings_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/settings_button"/>
+            android:contentDescription="@string/settings_button"
+            style="@style/Widget.Material3.Button.IconButton.Outlined"
+            app:icon="@drawable/settings"/>
     </LinearLayout>
 
 

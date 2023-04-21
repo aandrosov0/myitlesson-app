@@ -26,7 +26,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
     }
 
     public CourseAdapter() {
-        // TODO: list of courses
+        // TODO: make ArrayList of courses
     }
 
     @NonNull
@@ -41,6 +41,8 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
     public void onBindViewHolder(@NonNull CourseViewHolder holder, int position) {
         holder.titleTextView.setText(R.string.title);
         holder.bodyTextView.setText(R.string.body);
+
+        // TODO: Bind ADD COURSE button
     }
 
     @Override
