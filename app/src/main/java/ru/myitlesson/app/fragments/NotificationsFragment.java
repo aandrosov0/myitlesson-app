@@ -21,10 +21,10 @@ public class NotificationsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View layout1 = inflater.inflate(R.layout.notifications_fragment, container, false);
+        View layout = inflater.inflate(R.layout.notifications_fragment, container, false);
         MainActivity mainActivity = (MainActivity) requireActivity();
 
-        Toolbar notificationToolbar = layout1.findViewById(R.id.notification_toolbar);
+        Toolbar notificationToolbar = layout.findViewById(R.id.notification_toolbar);
         notificationToolbar.setTitle(R.string.notifications);
 
         notificationToolbar.setNavigationIcon(R.drawable.arrow_back);
@@ -33,16 +33,15 @@ public class NotificationsFragment extends Fragment {
         notificationToolbar.setNavigationOnClickListener(view -> mainActivity.setFragmentInContainer(R.id.fragment_container_view, ProfileFragment.class));
 
 
-        View layout2 = inflater.inflate(R.layout.notifications_fragment, container, false);
 
         NotificationAdapter notificationAdapter = new NotificationAdapter();
 
-        RecyclerView notificationsRecyclerView = layout2.findViewById(R.id.notifications_recycler_view);
+        RecyclerView notificationsRecyclerView = layout.findViewById(R.id.notifications_recycler_view);
 
         notificationsRecyclerView.setAdapter(notificationAdapter);
         notificationsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        return super.onCreateView(inflater, container, savedInstanceState);
+        return layout;
     }
 }
 /*
