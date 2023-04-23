@@ -19,17 +19,19 @@
             <TextView
                 android:id="@+id/notification_title"
                 style="@style/TextAppearance.MaterialComponents.Headline6"
-                android:layout_width="wrap_content"
+                android:layout_width="80dp"
                 android:layout_height="match_parent"
-                android:text="@string/title" />
+                android:text="@string/title"
+                android:padding="5dp"/>
 
-            <ImageButton
-                android:id="@+id/close_notification_Button"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/close_notification_button"
+                style="@style/Widget.Material3.Button.IconButton.Outlined"
                 android:layout_width="48dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="300dp"
                 android:contentDescription="@string/close_notification"
-                app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+                app:icon="@drawable/close" />
 
         </LinearLayout>
 
