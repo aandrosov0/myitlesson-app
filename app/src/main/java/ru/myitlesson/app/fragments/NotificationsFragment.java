@@ -7,14 +7,44 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import ru.myitlesson.app.R;
+import ru.myitlesson.app.activities.MainActivity;
+import ru.myitlesson.app.adapter.NotificationAdapter;
 
 public class NotificationsFragment extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        /*
+        View layout = inflater.inflate(R.layout.notifications_fragment, container, false);
+        MainActivity mainActivity = (MainActivity) requireActivity();
+
+        Toolbar notificationToolbar = layout.findViewById(R.id.notification_toolbar);
+        notificationToolbar.setTitle(R.string.notifications);
+
+        notificationToolbar.setNavigationIcon(R.drawable.arrow_back);
+
+        mainActivity.setSupportActionBar(notificationToolbar);
+        notificationToolbar.setNavigationOnClickListener(view -> mainActivity.setFragmentInContainer(R.id.fragment_container_view, ProfileFragment.class));
+
+
+
+        NotificationAdapter notificationAdapter = new NotificationAdapter();
+
+        RecyclerView notificationsRecyclerView = layout.findViewById(R.id.notifications_recycler_view);
+
+        notificationsRecyclerView.setAdapter(notificationAdapter);
+        notificationsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        return layout;
+    }
+}
+/*
             TODO: make a layout notifications_fragment.xml
                 in notifications_fragment.xml must be:
                     1. Toolbar
@@ -32,6 +62,3 @@ public class NotificationsFragment extends Fragment {
                     2. Bind Dynamic List (it must display 3 or more notifications)
                     3. Bind Custom Adapter to Dynamic List (you must write it. For example realization you can see CourseAdapter.java class)
          */
-        return super.onCreateView(inflater, container, savedInstanceState);
-    }
-}
