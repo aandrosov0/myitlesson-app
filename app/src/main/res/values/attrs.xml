@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <declare-styleable name="CircledImageView">
-        <attr name="android:strokeWidth" format="float"/>
-        <attr name="android:strokeColor" format="color"/>
-    </declare-styleable>
-</resources>
