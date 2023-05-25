@@ -8,10 +8,13 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 import ru.myitlesson.api.entity.LessonEntity;
 import ru.myitlesson.api.entity.ModuleEntity;
+import ru.myitlesson.app.InterfaceUtils;
 import ru.myitlesson.app.R;
 import ru.myitlesson.app.adapter.ListAdapter;
+import ru.myitlesson.app.api.ApiExecutor;
 import ru.myitlesson.app.api.Client;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,14 +42,14 @@ public class ModuleViewBinder extends ListAdapter.ViewBinder<ModuleEntity> {
         titleTextView.setText(title);
         descriptionTextView.setText(object.getContent());
 
-        new Thread(() -> Client.showDialogIfApiError(itemView.getContext(), () -> {
-            List<LessonEntity> lessons = new ArrayList<>();
-            for(int lessonId : object.getLessons()) {
-                lessons.add(Client.getInstance().api().lesson().get(lessonId));
-            }
+        new ApiExecutor(() -> loadLessons(object), exception -> InterfaceUtils.handleException(exception, itemView.getContext())).start();
+    }
 
-            itemView.post(() -> lessonsRecyclerView.setAdapter(new ListAdapter<>(lessons, LessonViewBinder.class)));
-        })).start();
-
+    private void loadLessons(ModuleEntity module) throws IOException {
+        List<LessonEntity> lessons = new ArrayList<>();
+        for(int lessonId : module.getLessons()) {
+            lessons.add(Client.getInstance().api().lesson().get(lessonId));
+        }
+        itemView.post(() -> lessonsRecyclerView.setAdapter(new ListAdapter<>(lessons, LessonViewBinder.class)));
     }
 }

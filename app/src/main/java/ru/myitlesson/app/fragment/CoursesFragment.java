@@ -12,8 +12,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import ru.myitlesson.api.entity.CourseEntity;
+import ru.myitlesson.app.InterfaceUtils;
 import ru.myitlesson.app.R;
 import ru.myitlesson.app.adapter.ListAdapter;
+import ru.myitlesson.app.api.ApiExecutor;
 import ru.myitlesson.app.api.Client;
 import ru.myitlesson.app.binder.CourseViewBinder;
 
@@ -29,7 +31,7 @@ public class CoursesFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.courses_fragment, container, false);
 
-        new Thread(() -> Client.showDialogIfApiError(getContext(), this::loadData)).start();
+        new ApiExecutor(this::loadData, exception -> InterfaceUtils.handleException(exception, getContext())).start();
 
         return layout;
     }

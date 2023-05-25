@@ -1,10 +1,7 @@
 package ru.myitlesson.app.api;
 
-import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import ru.myitlesson.api.MyItLessonClient;
+import ru.myitlesson.api.exception.APIException;
 
 import java.io.IOException;
 
@@ -13,6 +10,16 @@ public class Client {
     public interface OnError {
 
         void error() throws IOException;
+    }
+
+    public interface Execution {
+
+        void run() throws IOException, APIException;
+    }
+
+    public interface ErrorCallback {
+
+        void callback(Exception exception);
     }
 
     private static Client CLIENT;
@@ -31,18 +38,12 @@ public class Client {
         return CLIENT;
     }
 
-    public static boolean showDialogIfApiError(Context context, OnError onError) {
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
-
+    public static void handleApiException(Execution execution, ErrorCallback callback) {
         try {
-            onError.error();
-        } catch (Exception exception) {
-            builder.setCancelable(true).setMessage(exception.toString());
-            new Handler(Looper.getMainLooper()).post(builder::show);
-            return true;
+            execution.run();
+        } catch (IOException|APIException e) {
+            callback.callback(e);
         }
-
-        return false;
     }
 
     public MyItLessonClient api() {
@@ -55,5 +56,9 @@ public class Client {
 
     public void login(String token, int id) throws IOException {
         api = new MyItLessonClient(token, id);
+    }
+
+    public boolean isAuthorized() {
+        return api != null;
     }
 }

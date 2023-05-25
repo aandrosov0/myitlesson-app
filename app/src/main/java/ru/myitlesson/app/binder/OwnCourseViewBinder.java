@@ -21,14 +21,14 @@ public class OwnCourseViewBinder extends CourseViewBinder {
     public void bind(CourseEntity object) {
         super.bind(object);
 
-        Button actionButton = itemView.findViewById(R.id.action_button);
+        Button actionButton = itemView.findViewById(R.id.add_button);
         actionButton.setText(R.string.open_course);
         actionButton.setOnClickListener(view -> openCourse(view.getContext(), object.getId()));
     }
 
     private void openCourse(Context context, int id) {
         Intent intent = new Intent(context, CourseActivity.class);
-        intent.putExtra(CourseActivity.COURSE_ID_EXTRA, id);
+        intent.putExtra(CourseActivity.COURSE_EXTRA, id);
         context.startActivity(intent);
     }
 }

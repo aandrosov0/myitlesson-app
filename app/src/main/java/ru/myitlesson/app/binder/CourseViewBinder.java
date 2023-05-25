@@ -8,8 +8,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import ru.myitlesson.api.entity.CourseEntity;
+import ru.myitlesson.app.InterfaceUtils;
 import ru.myitlesson.app.R;
 import ru.myitlesson.app.adapter.ListAdapter;
+import ru.myitlesson.app.api.ApiExecutor;
 import ru.myitlesson.app.api.Client;
 
 import java.io.File;
@@ -34,7 +36,7 @@ public class CourseViewBinder extends ListAdapter.ViewBinder<CourseEntity> {
         titleTextView.setText(object.getTitle());
         bodyTextView.setText(object.getDescription());
 
-        new Thread(() -> Client.showDialogIfApiError(titleTextView.getContext(), () -> loadCourseImage(object.getId()))).start();
+        new ApiExecutor(() -> loadCourseImage(object.getId()), exception -> InterfaceUtils.handleException(exception, itemView.getContext())).start();
     }
 
     private void loadCourseImage(int id) throws IOException {

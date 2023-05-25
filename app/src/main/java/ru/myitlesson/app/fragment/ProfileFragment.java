@@ -13,14 +13,16 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import ru.myitlesson.api.MyItLessonClient;
 import ru.myitlesson.api.entity.CourseEntity;
 import ru.myitlesson.api.entity.UserEntity;
+import ru.myitlesson.app.InterfaceUtils;
 import ru.myitlesson.app.R;
 import ru.myitlesson.app.activity.MainActivity;
 import ru.myitlesson.app.adapter.ListAdapter;
+import ru.myitlesson.app.api.ApiExecutor;
 import ru.myitlesson.app.api.Client;
-import ru.myitlesson.app.binder.CourseViewBinder;
 import ru.myitlesson.app.binder.OwnCourseViewBinder;
 
 import java.io.IOException;
@@ -40,6 +42,7 @@ public class ProfileFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View layout = inflater.inflate(R.layout.profile_fragment, container, false);
 
         mainActivity = (MainActivity) requireActivity();
@@ -58,7 +61,10 @@ public class ProfileFragment extends Fragment {
         final Button notificationsButton = layout.findViewById(R.id.notifications_button);
         notificationsButton.setOnClickListener(view -> mainActivity.setFragmentInContainer(R.id.fragment_container_view, NotificationsFragment.class));
 
-        new Thread(() -> Client.showDialogIfApiError(mainActivity, this::loadData)).start();
+        final FloatingActionButton addButton = layout.findViewById(R.id.add_button);
+        addButton.setOnClickListener(view -> {/*TODO*/});
+
+        new ApiExecutor(this::loadData, exception -> InterfaceUtils.handleException(exception, getContext())).start();
 
         return layout;
     }

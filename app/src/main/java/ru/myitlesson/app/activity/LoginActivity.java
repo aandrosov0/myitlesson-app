@@ -2,7 +2,6 @@ package ru.myitlesson.app.activity;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
@@ -11,20 +10,29 @@ import android.widget.TextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import ru.myitlesson.app.InterfaceUtils;
 import ru.myitlesson.app.R;
 import ru.myitlesson.app.animation.CharacterByCharacterAnimation;
+import ru.myitlesson.app.api.ApiExecutor;
 import ru.myitlesson.app.api.Client;
+
+import java.io.IOException;
 
 public class LoginActivity extends Activity {
 
     private TextInputEditText usernameInputEditText;
     private TextInputEditText passwordInputEditText;
 
+    private Client client;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_activity);
 
+        client = Client.getInstance();
+        new ApiExecutor(this::authFromPreferences, exception -> InterfaceUtils.handleException(exception, this)).start();
+
+        setContentView(R.layout.login_activity);
         final TextInputLayout usernameInputLayout = findViewById(R.id.username_input_layout);
         final TextInputLayout passwordInputLayout = findViewById(R.id.password_input_layout);
 
@@ -63,17 +71,23 @@ public class LoginActivity extends Activity {
             return;
         }
 
-        new Thread(() -> auth(username.toString(), password.toString())).start();
+        new ApiExecutor(() -> auth(username.toString(), password.toString()), exception -> InterfaceUtils.handleException(exception, this)).start();
     }
 
-    private void auth(String username, String password) {
-        Client client = Client.getInstance();
+    private void auth(String username, String password) throws IOException {
+        client.login(username, password);
+        saveToken(client.api().getToken(), client.api().getUserId());
+        InterfaceUtils.startActivity(this, MainActivity.class);
+    }
 
-        if(!Client.showDialogIfApiError(this, () -> client.login(username, password))) {
-            saveToken(client.api().getToken(), client.api().getUserId());
+    private void authFromPreferences() throws IOException {
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        final String token = sharedPreferences.getString(getString(R.string.user_token_key), null);
+        final int id = sharedPreferences.getInt(getString(R.string.user_id_key), -1);
 
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
+        if(token != null && id != -1) {
+            client.login(token.split(" ")[1], id);
+            InterfaceUtils.startActivity(this, MainActivity.class);
         }
     }
 

@@ -17,6 +17,10 @@
 
         <activity
             android:name=".activity.MainActivity"
+            android:exported="true"/>
+
+        <activity
+            android:name=".activity.LoginActivity"
             android:exported="true">
 
             <intent-filter>
@@ -27,10 +31,6 @@
             </intent-filter>
 
         </activity>
-
-        <activity
-            android:name=".activity.LoginActivity"
-            android:exported="true"/>
 
         <activity
             android:name=".activity.CourseActivity"

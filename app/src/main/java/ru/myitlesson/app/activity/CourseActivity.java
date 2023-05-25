@@ -9,21 +9,20 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import ru.myitlesson.api.MyItLessonClient;
 import ru.myitlesson.api.entity.CourseEntity;
-import ru.myitlesson.api.entity.ModuleEntity;
+import ru.myitlesson.app.InterfaceUtils;
 import ru.myitlesson.app.R;
 import ru.myitlesson.app.adapter.FragmentListAdapter;
+import ru.myitlesson.app.api.ApiExecutor;
 import ru.myitlesson.app.api.Client;
 import ru.myitlesson.app.fragment.CourseInfoFragment;
 import ru.myitlesson.app.fragment.ModulesFragment;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class CourseActivity extends AppCompatActivity {
 
-    public static final String COURSE_ID_EXTRA = "COURSE_ID";
+    public static final String COURSE_EXTRA = "COURSE_ID";
 
     private final FragmentListAdapter fragmentAdapter = new FragmentListAdapter(this);
 
@@ -56,8 +55,8 @@ public class CourseActivity extends AppCompatActivity {
 
         toolbar.setNavigationOnClickListener(view -> onBackPressed());
 
-        int courseId = getIntent().getExtras().getInt(COURSE_ID_EXTRA);
-        new Thread(() -> Client.showDialogIfApiError(this, () -> loadCourseData(courseId))).start();
+        int courseId = getIntent().getExtras().getInt(COURSE_EXTRA);
+        new ApiExecutor(() -> loadCourseData(courseId), exception -> InterfaceUtils.handleException(exception, this)).start();
     }
 
     private void configureTabs(TabLayout.Tab tab, int position) {

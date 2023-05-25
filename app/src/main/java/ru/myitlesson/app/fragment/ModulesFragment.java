@@ -32,7 +32,6 @@ public class ModulesFragment extends Fragment {
         RecyclerView modulesRecyclerView = layout.findViewById(R.id.modules_recycler_view);
         modulesRecyclerView.setAdapter(new ListAdapter<>(modules, ModuleViewBinder.class));
         modulesRecyclerView.addItemDecoration(new DividerItemDecoration(layout.getContext(), DividerItemDecoration.HORIZONTAL));
-        modulesRecyclerView.setOnClickListener((view) -> {});
 
         return layout;
     }

@@ -7,14 +7,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import io.noties.markwon.Markwon;
 import ru.myitlesson.api.entity.LessonEntity;
+import ru.myitlesson.app.InterfaceUtils;
 import ru.myitlesson.app.R;
+import ru.myitlesson.app.api.ApiExecutor;
 import ru.myitlesson.app.api.Client;
 
 import java.io.IOException;
 
 public class LessonActivity extends AppCompatActivity {
 
-    public static final String LESSON_ID_EXTRA = "LESSON_ID";
+    public static final String LESSON_EXTRA = "LESSON_ID";
 
     private TextView contentTextView;
     private Toolbar toolbar;
@@ -33,8 +35,8 @@ public class LessonActivity extends AppCompatActivity {
 
         toolbar.setNavigationOnClickListener(view -> onBackPressed());
 
-        int lessonId = getIntent().getIntExtra(LESSON_ID_EXTRA, -1);
-        new Thread(() -> Client.showDialogIfApiError(this, () -> loadLesson(lessonId))).start();
+        int lessonId = getIntent().getIntExtra(LESSON_EXTRA, -1);
+        new ApiExecutor(() -> loadLesson(lessonId), exception -> InterfaceUtils.handleException(exception, this)).start();
     }
 
     private void loadLesson(int id) throws IOException {
