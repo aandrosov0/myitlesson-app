@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 import ru.myitlesson.api.entity.LessonEntity;
 import ru.myitlesson.api.entity.ModuleEntity;
-import ru.myitlesson.app.InterfaceUtils;
+import ru.myitlesson.app.AppUtils;
 import ru.myitlesson.app.R;
 import ru.myitlesson.app.adapter.ListAdapter;
 import ru.myitlesson.app.api.ApiExecutor;
@@ -42,7 +42,7 @@ public class ModuleViewBinder extends ListAdapter.ViewBinder<ModuleEntity> {
         titleTextView.setText(title);
         descriptionTextView.setText(object.getContent());
 
-        new ApiExecutor(() -> loadLessons(object), exception -> InterfaceUtils.handleException(exception, itemView.getContext())).start();
+        new ApiExecutor(() -> loadLessons(object), exception -> AppUtils.handleException(exception, itemView.getContext())).start();
     }
 
     private void loadLessons(ModuleEntity module) throws IOException {

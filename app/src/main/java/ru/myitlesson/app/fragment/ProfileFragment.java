@@ -17,8 +17,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import ru.myitlesson.api.MyItLessonClient;
 import ru.myitlesson.api.entity.CourseEntity;
 import ru.myitlesson.api.entity.UserEntity;
-import ru.myitlesson.app.InterfaceUtils;
+import ru.myitlesson.app.AppUtils;
 import ru.myitlesson.app.R;
+import ru.myitlesson.app.activity.EditorActivity;
 import ru.myitlesson.app.activity.MainActivity;
 import ru.myitlesson.app.adapter.ListAdapter;
 import ru.myitlesson.app.api.ApiExecutor;
@@ -42,7 +43,6 @@ public class ProfileFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         View layout = inflater.inflate(R.layout.profile_fragment, container, false);
 
         mainActivity = (MainActivity) requireActivity();
@@ -56,15 +56,15 @@ public class ProfileFragment extends Fragment {
         roleTextView = layout.findViewById(R.id.role_text_view);
 
         final Button settingsButton = layout.findViewById(R.id.settings_button);
-        settingsButton.setOnClickListener(view -> mainActivity.setFragmentInContainer(R.id.fragment_container_view, SettingsFragment.class));
+        settingsButton.setOnClickListener(view -> AppUtils.setFragmentInContainer(R.id.fragment_container_view, SettingsFragment.class, getParentFragmentManager()));
 
         final Button notificationsButton = layout.findViewById(R.id.notifications_button);
-        notificationsButton.setOnClickListener(view -> mainActivity.setFragmentInContainer(R.id.fragment_container_view, NotificationsFragment.class));
+        notificationsButton.setOnClickListener(view -> AppUtils.setFragmentInContainer(R.id.fragment_container_view, NotificationsFragment.class, getParentFragmentManager()));
 
         final FloatingActionButton addButton = layout.findViewById(R.id.add_button);
-        addButton.setOnClickListener(view -> {/*TODO*/});
+        addButton.setOnClickListener(view -> AppUtils.startActivity(requireContext(), EditorActivity.class));
 
-        new ApiExecutor(this::loadData, exception -> InterfaceUtils.handleException(exception, getContext())).start();
+        new ApiExecutor(this::loadData, exception -> AppUtils.handleException(exception, getContext())).start();
 
         return layout;
     }

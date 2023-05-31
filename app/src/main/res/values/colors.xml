@@ -2,6 +2,10 @@
 <resources>
     <color name="colorPrimary">#52b788</color>
     <color name="colorPrimaryContainer">#F3F3F3</color>
+    <color name="colorPrimaryHover">#6552B788</color>
+    <color name="colorPrimaryFocused">#9952B788</color>
 
     <color name="colorSecondary">#4FC68F</color>
+    <color name="colorTransparent">#0000</color>
+
 </resources>

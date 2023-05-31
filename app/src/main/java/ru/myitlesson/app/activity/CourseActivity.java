@@ -2,25 +2,20 @@ package ru.myitlesson.app.activity;
 
 import android.os.Bundle;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-import ru.myitlesson.api.MyItLessonClient;
 import ru.myitlesson.api.entity.CourseEntity;
-import ru.myitlesson.app.InterfaceUtils;
 import ru.myitlesson.app.R;
 import ru.myitlesson.app.adapter.FragmentListAdapter;
-import ru.myitlesson.app.api.ApiExecutor;
-import ru.myitlesson.app.api.Client;
 import ru.myitlesson.app.fragment.CourseInfoFragment;
 import ru.myitlesson.app.fragment.ModulesFragment;
 
 import java.io.IOException;
 import java.util.Arrays;
 
-public class CourseActivity extends AppCompatActivity {
+public class CourseActivity extends ClientActivity {
 
     public static final String COURSE_EXTRA = "COURSE_ID";
 
@@ -28,16 +23,13 @@ public class CourseActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
 
-    private CourseInfoFragment courseInfoFragment;
-    private ModulesFragment modulesFragment;
+    private final CourseInfoFragment courseInfoFragment = new CourseInfoFragment();
+    private final ModulesFragment modulesFragment = new ModulesFragment();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.course_activity);
-
-        courseInfoFragment = new CourseInfoFragment();
-        modulesFragment = new ModulesFragment();
 
         fragmentAdapter.getFragments().addAll(Arrays.asList(courseInfoFragment, modulesFragment));
 
@@ -49,14 +41,18 @@ public class CourseActivity extends AppCompatActivity {
         new TabLayoutMediator(tabLayout, viewPager, this::configureTabs).attach();
 
         toolbar = findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.drawable.arrow_back);
-
-        setSupportActionBar(toolbar);
-
         toolbar.setNavigationOnClickListener(view -> onBackPressed());
+    }
 
-        int courseId = getIntent().getExtras().getInt(COURSE_EXTRA);
-        new ApiExecutor(() -> loadCourseData(courseId), exception -> InterfaceUtils.handleException(exception, this)).start();
+    @Override
+    protected void onLoadApiData() throws IOException {
+        int courseId = getIntent().getIntExtra(COURSE_EXTRA, -1);
+        CourseEntity course = api.course().get(courseId);
+
+        courseInfoFragment.loadCourse(course);
+        modulesFragment.loadCourseData(course);
+
+        runOnUiThread(() -> toolbar.setTitle(course.getTitle()));
     }
 
     private void configureTabs(TabLayout.Tab tab, int position) {
@@ -69,16 +65,5 @@ public class CourseActivity extends AppCompatActivity {
                 tab.setText(getString(R.string.modules_page_title));
                 break;
         }
-    }
-
-    private void loadCourseData(int id) throws IOException {
-        MyItLessonClient api = Client.getInstance().api();
-
-        CourseEntity course = api.course().get(id);
-
-        courseInfoFragment.loadCourse(course);
-        modulesFragment.loadCourseData(course);
-
-        runOnUiThread(() -> toolbar.setTitle(course.getTitle()));
     }
 }

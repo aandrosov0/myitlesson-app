@@ -3,18 +3,14 @@ package ru.myitlesson.app.activity;
 import android.os.Bundle;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import io.noties.markwon.Markwon;
 import ru.myitlesson.api.entity.LessonEntity;
-import ru.myitlesson.app.InterfaceUtils;
 import ru.myitlesson.app.R;
-import ru.myitlesson.app.api.ApiExecutor;
-import ru.myitlesson.app.api.Client;
 
 import java.io.IOException;
 
-public class LessonActivity extends AppCompatActivity {
+public class LessonActivity extends ClientActivity {
 
     public static final String LESSON_EXTRA = "LESSON_ID";
 
@@ -34,13 +30,13 @@ public class LessonActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         toolbar.setNavigationOnClickListener(view -> onBackPressed());
-
-        int lessonId = getIntent().getIntExtra(LESSON_EXTRA, -1);
-        new ApiExecutor(() -> loadLesson(lessonId), exception -> InterfaceUtils.handleException(exception, this)).start();
     }
 
-    private void loadLesson(int id) throws IOException {
-        LessonEntity lesson = Client.getInstance().api().lesson().get(id);
+    @Override
+    protected void onLoadApiData() throws IOException {
+        int id = getIntent().getIntExtra(LESSON_EXTRA, -1);
+        LessonEntity lesson = api.lesson().get(id);
+
         Markwon markwon = Markwon.create(this);
 
         runOnUiThread(() -> toolbar.setTitle(lesson.getTitle()));

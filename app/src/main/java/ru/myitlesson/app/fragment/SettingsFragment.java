@@ -31,12 +31,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         MainActivity mainActivity = (MainActivity) requireActivity();
 
         Toolbar toolbar = layout.findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.settings);
 
-        toolbar.setNavigationIcon(R.drawable.arrow_back);
-
-        mainActivity.setSupportActionBar(toolbar);
-        toolbar.setNavigationOnClickListener(view -> mainActivity.setFragmentInContainer(R.id.fragment_container_view, ProfileFragment.class));
+        toolbar.setNavigationOnClickListener(view -> mainActivity.setFragmentByNavigationItem(R.id.profile_item));
 
         View settingsView = super.onCreateView(inflater, settingsContainerView, savedInstanceState);
         settingsContainerView.addView(settingsView);

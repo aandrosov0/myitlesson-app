@@ -1,16 +1,16 @@
 package ru.myitlesson.app.api;
 
 import ru.myitlesson.api.MyItLessonClient;
+import ru.myitlesson.api.entity.CourseEntity;
+import ru.myitlesson.api.entity.Entity;
+import ru.myitlesson.api.entity.ModuleEntity;
 import ru.myitlesson.api.exception.APIException;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Client {
-
-    public interface OnError {
-
-        void error() throws IOException;
-    }
 
     public interface Execution {
 
@@ -20,6 +20,11 @@ public class Client {
     public interface ErrorCallback {
 
         void callback(Exception exception);
+    }
+
+    public interface GetEntity<T extends Entity> {
+
+        T get(int id) throws IOException;
     }
 
     private static Client CLIENT;
@@ -36,6 +41,14 @@ public class Client {
         }
 
         return CLIENT;
+    }
+
+    public static MyItLessonClient getApi() {
+        if(CLIENT == null) {
+            return null;
+        }
+
+        return CLIENT.api;
     }
 
     public static void handleApiException(Execution execution, ErrorCallback callback) {
@@ -58,7 +71,13 @@ public class Client {
         api = new MyItLessonClient(token, id);
     }
 
-    public boolean isAuthorized() {
-        return api != null;
+    public <T extends Entity> List<T> getEntities(List<Integer> ids, GetEntity<T> getEntity) throws IOException {
+        List<T> entities = new ArrayList<>();
+
+        for(int id : ids) {
+            entities.add(getEntity.get(id));
+        }
+
+        return entities;
     }
 }

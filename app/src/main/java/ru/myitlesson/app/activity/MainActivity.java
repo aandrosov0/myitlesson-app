@@ -2,16 +2,14 @@ package ru.myitlesson.app.activity;
 
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import ru.myitlesson.app.AppUtils;
 import ru.myitlesson.app.R;
 import ru.myitlesson.app.fragment.*;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends ClientActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,33 +17,25 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.main_activity);
 
-        setFragmentInContainer(R.id.fragment_container_view, CoursesFragment.class);
+        AppUtils.setFragmentInContainer(R.id.fragment_container_view, CoursesFragment.class, getSupportFragmentManager());
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
         bottomNavigationView.setOnItemSelectedListener(item -> setFragmentByNavigationItem(item.getItemId()));
     }
 
-    public void setFragmentInContainer(int containerId, Class<? extends Fragment> fragmentClass) {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(containerId, fragmentClass, null)
-                .setReorderingAllowed(true)
-                .commit();
-    }
-
-    private boolean setFragmentByNavigationItem(int itemId) {
+    public boolean setFragmentByNavigationItem(int itemId) {
         if(itemId == R.id.courses_item) {
-            setFragmentInContainer(R.id.fragment_container_view, CoursesFragment.class);
+            AppUtils.setFragmentInContainer(R.id.fragment_container_view, CoursesFragment.class, getSupportFragmentManager());
             return true;
         }
 
         if(itemId == R.id.users_item) {
-            setFragmentInContainer(R.id.fragment_container_view, UsersFragment.class);
+            AppUtils.setFragmentInContainer(R.id.fragment_container_view, UsersFragment.class, getSupportFragmentManager());
             return true;
         }
 
         if(itemId == R.id.profile_item) {
-            setFragmentInContainer(R.id.fragment_container_view, ProfileFragment.class);
+            AppUtils.setFragmentInContainer(R.id.fragment_container_view, ProfileFragment.class, getSupportFragmentManager());
             return true;
         }
 

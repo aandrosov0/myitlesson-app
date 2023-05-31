@@ -28,12 +28,9 @@ public class NotificationsFragment extends Fragment {
         MainActivity mainActivity = (MainActivity) requireActivity();
 
         Toolbar notificationToolbar = layout.findViewById(R.id.notification_toolbar);
-        notificationToolbar.setTitle(R.string.notifications);
-
-        notificationToolbar.setNavigationIcon(R.drawable.arrow_back);
 
         mainActivity.setSupportActionBar(notificationToolbar);
-        notificationToolbar.setNavigationOnClickListener(view -> mainActivity.setFragmentInContainer(R.id.fragment_container_view, ProfileFragment.class));
+        notificationToolbar.setNavigationOnClickListener(view -> mainActivity.setFragmentByNavigationItem(R.id.profile_item));
 
         RecyclerView notificationsRecyclerView = layout.findViewById(R.id.notifications_recycler_view);
 

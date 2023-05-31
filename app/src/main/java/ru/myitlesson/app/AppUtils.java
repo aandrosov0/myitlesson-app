@@ -6,13 +6,15 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import ru.myitlesson.api.exception.TokenAuthException;
 import ru.myitlesson.app.activity.LoginActivity;
 
 import java.net.ConnectException;
 
-public final class InterfaceUtils extends AppCompatActivity {
+public final class AppUtils extends AppCompatActivity {
 
     public static void handleException(Exception exception, Context context) {
         String message = exception.getMessage();
@@ -42,5 +44,14 @@ public final class InterfaceUtils extends AppCompatActivity {
 
     public static void makeAlertDialog(Context context, String message, DialogInterface.OnCancelListener cancelListener) {
         new MaterialAlertDialogBuilder(context).setCancelable(true).setMessage(message).setOnCancelListener(cancelListener).show();
+    }
+
+    public static Fragment setFragmentInContainer(int containerId, Class<? extends Fragment> fragmentClass, FragmentManager manager) {
+        manager.beginTransaction()
+                .replace(containerId, fragmentClass, null)
+                .setReorderingAllowed(true)
+                .commitNow();
+
+        return manager.findFragmentById(containerId);
     }
 }

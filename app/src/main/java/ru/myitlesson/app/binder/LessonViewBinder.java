@@ -8,7 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import org.jetbrains.annotations.NotNull;
 import ru.myitlesson.api.entity.LessonEntity;
-import ru.myitlesson.app.InterfaceUtils;
+import ru.myitlesson.app.AppUtils;
 import ru.myitlesson.app.R;
 import ru.myitlesson.app.activity.LessonActivity;
 import ru.myitlesson.app.adapter.ListAdapter;
@@ -32,6 +32,6 @@ public class LessonViewBinder extends ListAdapter.ViewBinder<LessonEntity> {
     }
 
     private void openLesson(Context context, int id) {
-        InterfaceUtils.startActivityWithIntExtra(context, LessonActivity.class, LessonActivity.LESSON_EXTRA, id);
+        AppUtils.startActivityWithIntExtra(context, LessonActivity.class, LessonActivity.LESSON_EXTRA, id);
     }
 }

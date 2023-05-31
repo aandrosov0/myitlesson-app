@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-import ru.myitlesson.app.InterfaceUtils;
+import ru.myitlesson.app.AppUtils;
 import ru.myitlesson.app.R;
 import ru.myitlesson.app.animation.CharacterByCharacterAnimation;
 import ru.myitlesson.app.api.ApiExecutor;
@@ -30,7 +30,7 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         client = Client.getInstance();
-        new ApiExecutor(this::authFromPreferences, exception -> InterfaceUtils.handleException(exception, this)).start();
+        new ApiExecutor(this::authFromPreferences, exception -> AppUtils.handleException(exception, this)).start();
 
         setContentView(R.layout.login_activity);
         final TextInputLayout usernameInputLayout = findViewById(R.id.username_input_layout);
@@ -71,13 +71,13 @@ public class LoginActivity extends Activity {
             return;
         }
 
-        new ApiExecutor(() -> auth(username.toString(), password.toString()), exception -> InterfaceUtils.handleException(exception, this)).start();
+        new ApiExecutor(() -> auth(username.toString(), password.toString()), exception -> AppUtils.handleException(exception, this)).start();
     }
 
     private void auth(String username, String password) throws IOException {
         client.login(username, password);
         saveToken(client.api().getToken(), client.api().getUserId());
-        InterfaceUtils.startActivity(this, MainActivity.class);
+        AppUtils.startActivity(this, MainActivity.class);
     }
 
     private void authFromPreferences() throws IOException {
@@ -87,7 +87,7 @@ public class LoginActivity extends Activity {
 
         if(token != null && id != -1) {
             client.login(token.split(" ")[1], id);
-            InterfaceUtils.startActivity(this, MainActivity.class);
+            AppUtils.startActivity(this, MainActivity.class);
         }
     }
 

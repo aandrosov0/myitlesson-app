@@ -36,4 +36,18 @@
     <string name="user_id_key">ID</string>
     <string name="open_course">Open Course</string>
     <string name="read">Read</string>
+    <string name="set_type">Set Type</string>
+    <string name="editor_title">Editor</string>
+    <string name="course">Course</string>
+    <string name="module">Module</string>
+    <string name="lesson">Lesson</string>
+    <string name="save">Save</string>
+    <string name="view">View</string>
+    <string name="new_subject">New</string>
+    <string name="choice_course">Choice Course</string>
+    <string name="saved">Saved</string>
+    <string name="fragment_tag">fragment</string>
+    <string name="remove">Remove</string>
+    <string name="removed">Removed</string>
+    <string name="choice_module">Choice Module</string>
 </resources>

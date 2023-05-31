@@ -36,7 +36,6 @@
                 app:icon="@drawable/settings"/>
         </LinearLayout>
 
-
         <ru.myitlesson.app.widget.CircledImageView
             android:src="@drawable/user_profile"
             android:layout_width="wrap_content"
