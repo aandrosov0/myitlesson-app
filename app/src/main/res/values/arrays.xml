@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="subjects">
+        <item>@string/course</item>
+        <item>@string/module</item>
+        <item>@string/lesson</item>
+    </array>
+</resources>
