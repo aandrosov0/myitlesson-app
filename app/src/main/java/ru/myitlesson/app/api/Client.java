@@ -1,9 +1,7 @@
 package ru.myitlesson.app.api;
 
 import ru.myitlesson.api.MyItLessonClient;
-import ru.myitlesson.api.entity.CourseEntity;
 import ru.myitlesson.api.entity.Entity;
-import ru.myitlesson.api.entity.ModuleEntity;
 import ru.myitlesson.api.exception.APIException;
 
 import java.io.IOException;
