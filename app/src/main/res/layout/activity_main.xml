@@ -17,7 +17,7 @@
             android:id="@+id/fragment_container_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:layout="@layout/courses_fragment"/>
+            tools:layout="@layout/fragment_page_courses"/>
 
     </androidx.core.widget.NestedScrollView>
 
@@ -25,7 +25,7 @@
         android:id="@+id/bottom_navigation_view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_navigation_height"
-        app:menu="@menu/navigation_menu"
+        app:menu="@menu/bottom_navigation_pages_menu"
         android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

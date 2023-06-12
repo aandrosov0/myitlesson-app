@@ -1,8 +1,6 @@
 package ru.myitlesson.app.fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +18,7 @@ public class CourseInfoFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull  LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View layout = inflater.inflate(R.layout.course_info_fragment, container);
+        View layout = inflater.inflate(R.layout.fragment_course_info, container);
 
         descriptionTextView = layout.findViewById(R.id.description_text_view);
 
@@ -28,6 +26,6 @@ public class CourseInfoFragment extends Fragment {
     }
 
     public void loadCourse(CourseEntity courseEntity) {
-        new Handler(Looper.getMainLooper()).post(() -> descriptionTextView.setText(courseEntity.getDescription()));
+        descriptionTextView.setText(courseEntity.getDescription());
     }
 }

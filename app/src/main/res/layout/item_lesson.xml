@@ -2,13 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/lesson_item_default_height"
-    android:layout_marginTop="@dimen/recycler_view_default_margin"
+    android:layout_height="@dimen/height_item_lesson_default"
+    android:layout_marginTop="@dimen/margin_default"
     android:background="@color/colorSecondary"
     android:foreground="?android:attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
-    android:padding="@dimen/default_padding"
+    android:padding="@dimen/padding_default"
     android:elevation="3dp">
 
     <TextView

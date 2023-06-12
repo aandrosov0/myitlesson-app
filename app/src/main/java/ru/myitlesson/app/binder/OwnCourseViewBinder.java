@@ -22,7 +22,7 @@ public class OwnCourseViewBinder extends CourseViewBinder {
         super.bind(object);
 
         Button actionButton = itemView.findViewById(R.id.add_button);
-        actionButton.setText(R.string.open_course);
+        actionButton.setText(R.string.open_course_action);
         actionButton.setOnClickListener(view -> openCourse(view.getContext(), object.getId()));
     }
 

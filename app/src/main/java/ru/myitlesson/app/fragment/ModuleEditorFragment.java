@@ -1,6 +1,9 @@
 package ru.myitlesson.app.fragment;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.Editable;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -8,91 +11,107 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
-import org.jetbrains.annotations.NotNull;
-import ru.myitlesson.api.entity.CourseEntity;
 import ru.myitlesson.api.entity.ModuleEntity;
-import ru.myitlesson.api.entity.UserEntity;
-import ru.myitlesson.app.AppUtils;
+import ru.myitlesson.app.App;
 import ru.myitlesson.app.R;
 import ru.myitlesson.app.activity.EditorActivity;
-import ru.myitlesson.app.api.ApiExecutor;
+import ru.myitlesson.app.repository.ModuleRepository;
+import ru.myitlesson.app.repository.RepositoryResult;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
-
 
 public class ModuleEditorFragment extends Fragment implements EditorActivity.OnSubjectEventListener {
 
-    protected TextInputEditText titleTextInputEditText;
-    protected TextInputEditText contentTextInputEditText;
+    private final EditorActivity editorActivity;
 
-    protected EditorActivity editorActivity;
+    private final CourseEditorFragment courseEditorFragment;
 
-    protected CourseEntity course;
-    protected ModuleEntity module;
+    private final ModuleRepository moduleRepository;
 
-    public ModuleEditorFragment() {
-        super(R.layout.subject_editor_layout);
+    private ModuleEntity module;
+
+    private Editable titleEditable;
+    private Editable contentEditable;
+
+    public ModuleEditorFragment(EditorActivity editorActivity) {
+        super(R.layout.fragment_subject_editor);
+
+        this.editorActivity = editorActivity;
+        this.courseEditorFragment = editorActivity.getCourseEditorFragment();
+        this.moduleRepository = App.getModuleRepository();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        editorActivity = (EditorActivity) requireActivity();
-
-        titleTextInputEditText = view.findViewById(R.id.title_text_input_edit_text);
-        contentTextInputEditText = view.findViewById(R.id.description_text_input_edit_text);
+        titleEditable = ((TextInputEditText) view.findViewById(R.id.title_text_input_edit_text)).getEditableText();
+        contentEditable = ((TextInputEditText) view.findViewById(R.id.description_text_input_edit_text)).getEditableText();
     }
 
     @Override
-    public void save(@NotNull UserEntity user) throws IOException {
-        module.setTitle(Objects.requireNonNull(titleTextInputEditText.getText()).toString());
-        module.setContent(Objects.requireNonNull(contentTextInputEditText.getText()).toString());
+    public void onSave() {
+        module.setTitle(titleEditable.toString());
+        module.setContent(contentEditable.toString());
 
-        editorActivity.getApi().module().add(module, course);
-        editorActivity.runOnUiThread(() -> Toast.makeText(editorActivity, R.string.saved, Toast.LENGTH_SHORT).show());
+        moduleRepository.add(module, courseEditorFragment.getCourse().getId(), (result) -> {
+            if(result instanceof RepositoryResult.Success) {
+                Log.d("TAG", "onSave: " + App.getClient().getError());
+                editorActivity.runOnUiThread(() -> Toast.makeText(editorActivity, "Module added " + ((RepositoryResult.Success<Integer>) result).data, Toast.LENGTH_SHORT).show());
+            }
+        });
     }
 
     @Override
-    public void remove(@NotNull UserEntity user) throws IOException {
-        editorActivity.getApi().module().remove(module.getId());
-        editorActivity.runOnUiThread(() -> Toast.makeText(editorActivity, R.string.removed, Toast.LENGTH_SHORT).show());
+    public void onRemove() {
+        moduleRepository.delete(module.getId(), (result) -> editorActivity.runOnUiThread(() -> Toast.makeText(editorActivity, "Module deleted " + module.getId(), Toast.LENGTH_SHORT).show()));
     }
 
     @Override
-    public void view() {
+    public void onView() {
 
     }
 
     @Override
-    public void setCourse(CourseEntity course) throws IOException {
-        if(course == null) {
-            editorActivity.runOnUiThread(() -> editorActivity.navigateByToolbarMenuItem(R.id.type_item));
-            return;
-        }
-
-        List<ModuleEntity> modules = editorActivity.getClient().getEntities(course.getModules(), editorActivity.getApi().module()::get);
-        String[] moduleTitles = modules.stream().map(ModuleEntity::getTitle).toArray(String[]::new);
-
-        MaterialAlertDialogBuilder moduleDialog = new MaterialAlertDialogBuilder(editorActivity)
-                .setCancelable(false)
-                .setTitle(R.string.choice_module)
-                .setSingleChoiceItems(moduleTitles, 0, (dialog, which) -> module = modules.get(which))
-                .setPositiveButton(android.R.string.ok, (d, w) -> new ApiExecutor(() -> setModule(module), e -> AppUtils.handleException(e, editorActivity)).start())
-                .setNeutralButton(R.string.new_subject, (d, w) -> new ApiExecutor(() -> setModule(null), e -> AppUtils.handleException(e, editorActivity)).start());
-
-        editorActivity.runOnUiThread(moduleDialog::show);
+    public void onInsertedInContainer() {
+        courseEditorFragment.makeChoiceDialog((d, i) -> {
+            if(i == DialogInterface.BUTTON_NEUTRAL) {
+                editorActivity.navigateByToolbarMenuItem(R.id.type_action);
+            } else {
+                makeChoiceDialog((dialog, which) -> {});
+            }
+        });
     }
 
-    public void setModule(ModuleEntity module) throws IOException {
-        if(module == null) {
-            module = new ModuleEntity();
-        }
+    public void makeChoiceDialog(DialogInterface.OnClickListener onClickListener) {
+        moduleRepository.getCourseModules(courseEditorFragment.getCourse().getId(), result -> {
+            if(result instanceof RepositoryResult.Success) {
+                List<ModuleEntity> modules = ((RepositoryResult.Success<List<ModuleEntity>>) result).data;
+                String[] moduleTitles = modules.stream().map(ModuleEntity::getTitle).toArray(String[]::new);
 
-        titleTextInputEditText.setText(module.getTitle());
-        contentTextInputEditText.setText(module.getContent());
-        this.module = module;
+                editorActivity.runOnUiThread(new MaterialAlertDialogBuilder(editorActivity)
+                        .setCancelable(false)
+                        .setTitle(R.string.choice_module_action)
+                        .setSingleChoiceItems(moduleTitles, -1, (d, w) -> {
+                            module = modules.get(w);
+
+                            if(titleEditable != null && contentEditable != null) {
+                                titleEditable.replace(0, titleEditable.length(), module.getTitle());
+                                contentEditable.replace(0, contentEditable.length(), module.getContent());
+
+                            }
+                            onClickListener.onClick(d, w);
+                            d.dismiss();
+                        })
+                        .setNeutralButton(R.string.new_subject_action, (d, w) -> {
+                            module = new ModuleEntity();
+                            onClickListener.onClick(d, w);
+                        })::show);
+            }
+        });
+    }
+
+    public ModuleEntity getModule() {
+        return module;
     }
 }

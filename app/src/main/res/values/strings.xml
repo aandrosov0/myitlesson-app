@@ -1,53 +1,61 @@
 <resources>
     <string name="app_name">MyItLesson</string>
+
+    <!--  HINTS  -->
     <string name="username_hint">Username</string>
     <string name="password_hint">Password</string>
+    <string name="find_course_hint">Find Course</string>
+
+    <!--  MESSAGES  -->
+    <string name="saved_message">Saved</string>
+    <string name="removed_message">Removed</string>
+    <string name="wait_message">Please wait …</string>
     <string name="login_message">To login you must authorize</string>
-    <string name="invalid_username">Invalid username</string>
-    <string name="invalid_password">Password have to be lower than 8 symbols</string>
-    <string name="incorrect_data">Incorrect data, Try again</string>
-    <string name="logo">Logo</string>
-    <string name="courses_item">Courses</string>
-    <string name="users_item">Users</string>
-    <string name="profile_item">My Profile</string>
-    <string name="find_course_search_hint">Find Course</string>
-    <string name="recommend_courses">Recommend</string>
-    <string name="course_card_image">Course Card Image</string>
-    <string name="user_card_image">User Card Image</string>
-    <string name="title">Title</string>
+    <string name="invalid_username_message">Invalid username</string>
+    <string name="incorrect_data_message">Incorrect data, Try again</string>
+    <string name="invalid_password_message">Password have to be lower than 8 symbols</string>
+    <string name="server_connection_error_message">Can\'t connect to the server.</string>
+
+    <!--  PAGES  -->
+    <string name="courses_page">Courses</string>
+    <string name="profile_page">My Profile</string>
+    <string name="my_courses_page">My Courses</string>
+
+    <!--  WORDS  -->
+    <string name="info">Info</string>
     <string name="body">Body</string>
-    <string name="add_course">ADD COURSE</string>
-    <string name="notification_button">Notifications</string>
-    <string name="profile_image">Profile Image</string>
-    <string name="user_credentials">First Name Last Name</string>
-    <string name="user_role">User Role</string>
-    <string name="my_courses_title">My Courses</string>
-    <string name="settings_button">Settings</string>
-    <string name="settings">Settings</string>
-    <string name="description">Description</string>
-    <string name="close_notification">Close Notification</string>
-    <string name="notifications">Notifications</string>
-    <string name="course_info_page_title">Info</string>
-    <string name="modules_page_title">Modules</string>
-    <string name="connection_error">Can\'t connect to the server.</string>
-    <string name="preference_file_key">ru.myitlesson.app.USER_CREDENTIALS</string>
-    <string name="user_token_key">TOKEN</string>
-    <string name="wait_message">Please wait ...</string>
-    <string name="user_id_key">ID</string>
-    <string name="open_course">Open Course</string>
-    <string name="read">Read</string>
-    <string name="set_type">Set Type</string>
-    <string name="editor_title">Editor</string>
-    <string name="course">Course</string>
-    <string name="module">Module</string>
-    <string name="lesson">Lesson</string>
+    <string name="logo">Logo</string>
     <string name="save">Save</string>
     <string name="view">View</string>
-    <string name="new_subject">New</string>
-    <string name="choice_course">Choice Course</string>
-    <string name="saved">Saved</string>
-    <string name="fragment_tag">fragment</string>
-    <string name="remove">Remove</string>
-    <string name="removed">Removed</string>
-    <string name="choice_module">Choice Module</string>
+    <string name="title">Title</string>
+    <string name="module">Module</string>
+    <string name="course">Course</string>
+    <string name="lesson">Lesson</string>
+    <string name="editor">Editor</string>
+    <string name="modules">Modules</string>
+    <string name="settings">Settings</string>
+    <string name="recommend">Recommend</string>
+    <string name="user_role">User Role</string>
+    <string name="card_image">Card Image</string>
+    <string name="my_courses">My Courses</string>
+    <string name="description">Description</string>
+    <string name="notifications">Notifications</string>
+    <string name="profile_image">Profile Image</string>
+    <string name="user_credentials">First Name Last Name</string>
+
+    <!--  ACTIONS  -->
+    <string name="read_action">Read</string>
+    <string name="remove_action">Remove</string>
+    <string name="new_subject_action">New</string>
+    <string name="set_type_action">Set Type</string>
+    <string name="add_course_action">ADD COURSE</string>
+    <string name="open_course_action">Open Course</string>
+    <string name="choice_course_action">Choice Course</string>
+    <string name="choice_module_action">Choice Module</string>
+    <string name="choice_lesson_action">Choice Lesson</string>
+    <string name="close_notification_action">Close Notification</string>
+
+    <!--  KEYS  -->
+    <string name="username_key">USERNAME</string>
+    <string name="password_key">PASSWORD</string>
 </resources>

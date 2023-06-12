@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/default_padding">
+    android:padding="@dimen/padding_default">
 
     <com.google.android.material.textfield.TextInputLayout
         android:theme="@style/Widget.App.TextInputLayout"

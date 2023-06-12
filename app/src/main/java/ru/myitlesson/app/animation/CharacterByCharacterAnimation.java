@@ -1,7 +1,9 @@
 package ru.myitlesson.app.animation;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.widget.TextView;
+import androidx.core.os.HandlerCompat;
 
 public class CharacterByCharacterAnimation implements Runnable {
 
@@ -13,7 +15,7 @@ public class CharacterByCharacterAnimation implements Runnable {
     private long delay;
 
     public CharacterByCharacterAnimation(TextView textView, CharSequence text) {
-        this.handler = new Handler();
+        this.handler = HandlerCompat.createAsync(Looper.getMainLooper());
         this.textView = textView;
         this.text = text;
         this.textView.setText("");

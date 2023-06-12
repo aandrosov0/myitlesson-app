@@ -11,23 +11,23 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 import ru.myitlesson.api.entity.CourseEntity;
 import ru.myitlesson.api.entity.ModuleEntity;
+import ru.myitlesson.app.App;
 import ru.myitlesson.app.R;
 import ru.myitlesson.app.adapter.ListAdapter;
-import ru.myitlesson.app.api.Client;
 import ru.myitlesson.app.binder.ModuleViewBinder;
+import ru.myitlesson.app.repository.RepositoryResult;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ModulesFragment extends Fragment {
 
-    private final List<ModuleEntity> modules = new ArrayList<>();
+    private List<ModuleEntity> modules = new ArrayList<>();
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View layout = inflater.inflate(R.layout.modules_fragment, container);
+        View layout = inflater.inflate(R.layout.fragment_modules, container);
 
         RecyclerView modulesRecyclerView = layout.findViewById(R.id.modules_recycler_view);
         modulesRecyclerView.setAdapter(new ListAdapter<>(modules, ModuleViewBinder.class));
@@ -36,9 +36,11 @@ public class ModulesFragment extends Fragment {
         return layout;
     }
 
-    public void loadCourseData(CourseEntity course) throws IOException {
-        for(int moduleId : course.getModules()) {
-            modules.add(Client.getInstance().api().module().get(moduleId));
-        }
+    public void loadCourse(CourseEntity course) {
+        App.getModuleRepository().getCourseModules(course.getId(), result -> {
+            if(result instanceof RepositoryResult.Success) {
+                modules = ((RepositoryResult.Success<List<ModuleEntity>>) result).data;
+            }
+        });
     }
 }

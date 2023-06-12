@@ -2,22 +2,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/type_item"
-        android:title="@string/set_type"
+        android:id="@+id/type_action"
+        android:title="@string/set_type_action"
         app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/save_item"
+        android:id="@+id/save_action"
         android:title="@string/save"
         app:showAsAction="collapseActionView"/>
 
     <item
-        android:id="@+id/view_item"
+        android:id="@+id/view_action"
         android:title="@string/view"
         app:showAsAction="collapseActionView"/>
 
     <item
-        android:id="@+id/remove_item"
-        android:title="@string/remove"
+        android:id="@+id/remove_action"
+        android:title="@string/remove_action"
         app:showAsAction="collapseActionView"/>
 </menu>

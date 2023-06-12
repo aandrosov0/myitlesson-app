@@ -13,8 +13,8 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:menu="@menu/editor_menu"
-            app:title="@string/editor_title"
+            app:menu="@menu/editor_action_menu"
+            app:title="@string/editor"
             app:navigationIcon="@drawable/arrow_back"/>
 
         <com.google.android.material.divider.MaterialDivider
@@ -32,8 +32,7 @@
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragment_container_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:tag="@string/fragment_tag"/>
+            android:layout_height="match_parent"/>
 
     </androidx.core.widget.NestedScrollView>
 

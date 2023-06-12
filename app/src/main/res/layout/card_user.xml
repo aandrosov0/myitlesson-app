@@ -2,7 +2,7 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/card_view_default_margin">
+    android:layout_margin="@dimen/margin_default">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -13,7 +13,7 @@
             android:id="@+id/imageView"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:contentDescription="@string/user_card_image"
+            android:contentDescription="@string/card_image"
             android:scaleType="centerCrop"
             android:src="@drawable/solid_black"
             />

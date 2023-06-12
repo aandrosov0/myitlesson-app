@@ -17,7 +17,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        setPreferencesFromResource(R.xml.app_main_preferences, rootKey);
+        setPreferencesFromResource(R.xml.preferences_app_main, rootKey);
 
         // TODO: Bind preferences
     }
@@ -25,14 +25,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     @NonNull
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View layout = inflater.inflate(R.layout.preferences_fragment, container, false);
+        View layout = inflater.inflate(R.layout.fragment_preferences, container, false);
         ViewGroup settingsContainerView = layout.findViewById(R.id.settings_container_view);
 
         MainActivity mainActivity = (MainActivity) requireActivity();
 
         Toolbar toolbar = layout.findViewById(R.id.toolbar);
 
-        toolbar.setNavigationOnClickListener(view -> mainActivity.setFragmentByNavigationItem(R.id.profile_item));
+        toolbar.setNavigationOnClickListener(view -> mainActivity.setFragmentByNavigationItem(R.id.profile_page));
 
         View settingsView = super.onCreateView(inflater, settingsContainerView, savedInstanceState);
         settingsContainerView.addView(settingsView);

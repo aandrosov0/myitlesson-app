@@ -1,38 +1,36 @@
 package ru.myitlesson.app.activity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
-
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-import ru.myitlesson.app.AppUtils;
+import ru.myitlesson.api.ApiError;
+import ru.myitlesson.api.MyItLessonClient;
+import ru.myitlesson.app.App;
+import ru.myitlesson.app.Utils;
 import ru.myitlesson.app.R;
 import ru.myitlesson.app.animation.CharacterByCharacterAnimation;
-import ru.myitlesson.app.api.ApiExecutor;
-import ru.myitlesson.app.api.Client;
-
-import java.io.IOException;
+import ru.myitlesson.app.repository.LoginRepository;
+import ru.myitlesson.app.repository.RepositoryResult;
 
 public class LoginActivity extends Activity {
 
     private TextInputEditText usernameInputEditText;
     private TextInputEditText passwordInputEditText;
 
-    private Client client;
+    private final LoginRepository loginRepository = App.getLoginRepository();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        client = Client.getInstance();
-        new ApiExecutor(this::authFromPreferences, exception -> AppUtils.handleException(exception, this)).start();
+        loginFromPreferences();
 
-        setContentView(R.layout.login_activity);
+        setContentView(R.layout.activity_login);
         final TextInputLayout usernameInputLayout = findViewById(R.id.username_input_layout);
         final TextInputLayout passwordInputLayout = findViewById(R.id.password_input_layout);
 
@@ -62,41 +60,62 @@ public class LoginActivity extends Activity {
         CharSequence password = passwordInputEditText.getText();
 
         if((username == null) || (username.length() == 0)) {
-            usernameInputLayout.setError(getString(R.string.invalid_username));
+            usernameInputLayout.setError(getString(R.string.invalid_username_message));
             return;
         }
 
         if((password == null) || (password.length() < 8)) {
-            passwordInputLayout.setError(getString(R.string.invalid_password));
+            passwordInputLayout.setError(getString(R.string.invalid_password_message));
             return;
         }
 
-        new ApiExecutor(() -> auth(username.toString(), password.toString()), exception -> AppUtils.handleException(exception, this)).start();
+        loginRepository.makeLoginRequest(username.toString(), password.toString(), this::onLoginRequestComplete);
     }
 
-    private void auth(String username, String password) throws IOException {
-        client.login(username, password);
-        saveToken(client.api().getToken(), client.api().getUserId());
-        AppUtils.startActivity(this, MainActivity.class);
-    }
+    private void onLoginRequestComplete(RepositoryResult<MyItLessonClient> result) {
+        if(result instanceof RepositoryResult.Success) {
+            MyItLessonClient client = ((RepositoryResult.Success<MyItLessonClient>) result).data;
+            ApiError error = client.getError();
 
-    private void authFromPreferences() throws IOException {
-        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        final String token = sharedPreferences.getString(getString(R.string.user_token_key), null);
-        final int id = sharedPreferences.getInt(getString(R.string.user_id_key), -1);
+            if(error != null && error.getCode() == ApiError.Code.AUTHORIZATION) {
+                runOnUiThread(() -> Utils.showAlertDialog(this, getString(R.string.incorrect_data_message)));
+                return;
+            } else if(error != null && error.getCode() == ApiError.Code.NOT_FOUND) {
+                runOnUiThread(() -> Utils.showAlertDialog(this, error.getMessage()));
+                return;
+            }
 
-        if(token != null && id != -1) {
-            client.login(token.split(" ")[1], id);
-            AppUtils.startActivity(this, MainActivity.class);
+            saveUserCredentials();
+            Utils.startActivity(this, MainActivity.class);
+        } else {
+            runOnUiThread(() -> Utils.handleRepositoryError((RepositoryResult.Error<MyItLessonClient>) result, this));
         }
     }
 
-    private void saveToken(String token, int id) {
-        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+    private void saveUserCredentials() {
+        CharSequence username = usernameInputEditText.getText();
+        CharSequence password = passwordInputEditText.getText();
 
-        sharedPreferences.edit()
-                .putString(getString(R.string.user_token_key), token)
-                .putInt(getString(R.string.user_id_key), id)
+        if(username == null || password == null || username.length() == 0 || password.length() == 0) {
+            return;
+        }
+
+        getPreferences(MODE_PRIVATE).edit()
+                .putString(getString(R.string.username_key), username.toString())
+                .putString(getString(R.string.password_key), password.toString())
                 .apply();
+    }
+
+    private void loginFromPreferences() {
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+
+        String username = preferences.getString(getString(R.string.username_key), null);
+        String password = preferences.getString(getString(R.string.password_key), null);
+
+        if(username == null || password == null) {
+            return;
+        }
+
+        loginRepository.makeLoginRequest(username, password, this::onLoginRequestComplete);
     }
 }

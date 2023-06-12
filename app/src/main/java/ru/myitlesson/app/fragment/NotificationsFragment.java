@@ -24,13 +24,13 @@ public class NotificationsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View layout = inflater.inflate(R.layout.notifications_fragment, container, false);
+        View layout = inflater.inflate(R.layout.fragment_notifications, container, false);
         MainActivity mainActivity = (MainActivity) requireActivity();
 
         Toolbar notificationToolbar = layout.findViewById(R.id.notification_toolbar);
 
         mainActivity.setSupportActionBar(notificationToolbar);
-        notificationToolbar.setNavigationOnClickListener(view -> mainActivity.setFragmentByNavigationItem(R.id.profile_item));
+        notificationToolbar.setNavigationOnClickListener(view -> mainActivity.setFragmentByNavigationItem(R.id.profile_page));
 
         RecyclerView notificationsRecyclerView = layout.findViewById(R.id.notifications_recycler_view);
 

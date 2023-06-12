@@ -8,14 +8,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import ru.myitlesson.api.entity.CourseEntity;
-import ru.myitlesson.app.AppUtils;
+import ru.myitlesson.app.App;
 import ru.myitlesson.app.R;
 import ru.myitlesson.app.adapter.ListAdapter;
-import ru.myitlesson.app.api.ApiExecutor;
-import ru.myitlesson.app.api.Client;
+import ru.myitlesson.app.repository.CourseRepository;
+import ru.myitlesson.app.repository.RepositoryResult;
 
 import java.io.File;
-import java.io.IOException;
 
 public class CourseViewBinder extends ListAdapter.ViewBinder<CourseEntity> {
 
@@ -23,28 +22,34 @@ public class CourseViewBinder extends ListAdapter.ViewBinder<CourseEntity> {
     protected final TextView bodyTextView;
     protected final ImageView imageView;
 
+    protected final CourseRepository courseRepository;
+
     public CourseViewBinder(@NonNull ViewGroup view) {
-        super((ViewGroup) LayoutInflater.from(view.getContext()).inflate(R.layout.course_card,  view, false));
+        super((ViewGroup) LayoutInflater.from(view.getContext()).inflate(R.layout.card_course,  view, false));
 
         titleTextView = itemView.findViewById(R.id.title_text_view);
         bodyTextView = itemView.findViewById(R.id.body_text_view);
         imageView = itemView.findViewById(R.id.image_view);
+
+        courseRepository = App.getCourseRepository();
     }
 
     @Override
-    public void bind(CourseEntity object) {
-        titleTextView.setText(object.getTitle());
-        bodyTextView.setText(object.getDescription());
+    public void bind(CourseEntity course) {
+        titleTextView.setText(course.getTitle());
+        bodyTextView.setText(course.getDescription());
 
-        new ApiExecutor(() -> loadCourseImage(object.getId()), exception -> AppUtils.handleException(exception, itemView.getContext())).start();
+        courseRepository.getImage(course, this::onGetImageComplete);
     }
 
-    private void loadCourseImage(int id) throws IOException {
-        File image = Client.getInstance().api().course().imageGet(id);
+    private void onGetImageComplete(RepositoryResult<File> result) {
+        if(result instanceof RepositoryResult.Success) {
+            File image = ((RepositoryResult.Success<File>) result).data;
 
-        if(image != null) {
-            Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath());
-            imageView.post(() -> imageView.setImageBitmap(bitmap));
+            if(image != null) {
+                Bitmap imageBitmap = BitmapFactory.decodeFile(image.getAbsolutePath());
+                imageView.post(() -> imageView.setImageBitmap(imageBitmap));
+            }
         }
     }
 }
